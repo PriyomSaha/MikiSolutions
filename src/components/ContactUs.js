@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, memo } from "react";
 import {
   TextField,
   Button,
@@ -10,11 +10,22 @@ import {
 import emailjs from "@emailjs/browser";
 import Grid from "@mui/material/Grid";
 
-const ContactUs = () => {
-  const firstNameRef = useRef(null);
+const ContactUsContainer = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  minHeight: "90vh",
+  color: "white",
+  textAlign: "center",
+  padding: "1rem",
+});
+
+const ContactUs = memo(() => {
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const messageRef = useRef(null);
+  const firstNameRef = useRef(null);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -50,6 +61,10 @@ const ContactUs = () => {
             (result) => {
               console.log(result.text);
               alert("Message sent successfully!");
+              setFirstName("");
+              setLastName("");
+              setEmail("");
+              setMessage("");
             },
             (error) => {
               console.log(error.text);
@@ -71,38 +86,6 @@ const ContactUs = () => {
     setErrors(tempErrors);
     return Object.values(tempErrors).every((x) => x === "");
   };
-
-  const keepFocus = (ref) => {
-    if (ref.current) {
-      ref.current.focus();
-    }
-  };
-
-  useEffect(() => keepFocus(firstNameRef), [firstName]);
-  useEffect(() => keepFocus(lastNameRef), [lastName]);
-  useEffect(() => keepFocus(emailRef), [email]);
-  useEffect(() => keepFocus(messageRef), [message]);
-
-  const handleMessageChange = (e) => {
-    const newMessage = e.target.value;
-    setMessage(newMessage);
-    // Move cursor to the end of the input after updating the value
-    setTimeout(() => {
-      const length = newMessage.length;
-      messageRef.current.setSelectionRange(length, length);
-    }, -1);
-  };
-
-  const ContactUsContainer = styled(Box)({
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "90vh",
-    color: "white",
-    textAlign: "center",
-    padding: "1rem",
-  });
 
   return (
     <ContactUsContainer name="contactus">
@@ -145,7 +128,6 @@ const ContactUs = () => {
         <Grid container columnSpacing={1.5}>
           <Grid item xs={12} sm={6}>
             <TextField
-              autoFocus
               inputRef={firstNameRef}
               id="firstName"
               label="First Name"
@@ -209,7 +191,7 @@ const ContactUs = () => {
           label="Message"
           name="message"
           value={message}
-          onChange={(e) => handleMessageChange(e)}
+          onChange={(e) => setMessage(e.target.value)}
           error={!!errors.message}
           helperText={errors.message}
           multiline
@@ -237,6 +219,6 @@ const ContactUs = () => {
       </Box>
     </ContactUsContainer>
   );
-};
+});
 
 export default ContactUs;
