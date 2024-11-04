@@ -9,7 +9,6 @@ const ServiceContainer = styled(Box)({
   alignItems: "center",
   minHeight: "100vh",
   color: "white",
-  textAlign: "center",
   padding: "1rem",
 });
 
@@ -25,16 +24,16 @@ const WhyChooseUs = () => {
             sm: "2.5rem",
             md: "3rem",
           },
-          textAlign: "start", // Aligns header text to the left
+          textAlign: "start",
         }}
       >
-        Why Us ?
+        Why Us?
       </Typography>
 
       <Box
         className="descriptionTextContainer"
         sx={{
-          textAlign: "start", // Aligns all content in the Box to the left
+          alignItems: "flex-start",
           maxWidth: {
             xs: "100%",
             sm: "100%",
